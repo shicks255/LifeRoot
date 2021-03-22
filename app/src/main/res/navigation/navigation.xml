@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/fragment_home">
+
+    <fragment
+        android:id="@+id/fragment_home"
+        android:name="com.shicks.lifeRoot.HomeFragment"
+        android:label="Home">
+        <action
+            android:id="@+id/action_fragment_home_to_list_fragment"
+            app:destination="@id/list_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/list_fragment"
+        android:name="com.shicks.lifeRoot.list.ListFragment"
+        android:label="Lists">
+        <action
+            android:id="@+id/action_list_fragment_to_fragment_home"
+            app:destination="@id/fragment_home" />
+        <action
+            android:id="@+id/action_list_fragment_to_edit_list_fragment"
+            app:destination="@id/edit_list_fragment" />
+    </fragment>
+
+    <fragment
+        android:label="Edit List"
+        android:id="@+id/edit_list_fragment"
+        android:name="com.shicks.lifeRoot.list.EditListFragment">
+        <action
+            android:id="@+id/action_edit_list_fragment_to_list_fragment"
+            app:destination="@id/list_fragment" />
+        <argument
+            android:name="editListId"
+            app:argType="long" />
+    </fragment>
+
+
+</navigation>

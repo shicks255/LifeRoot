@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">LifeRoot</string>
+    <string name="reminders">Reminders</string>
+    <string name="lists">Lists</string>
+    <string name="tasks">Tasks</string>
+    <string name="my_lists">My Lists</string>
+    <string name="enter_a_list_item">Enter a list item</string>
+    <string name="enter_a_list_title">Enter a list title</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+</resources>
