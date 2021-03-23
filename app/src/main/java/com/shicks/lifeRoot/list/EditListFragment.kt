@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.ListAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -28,9 +30,9 @@ class EditListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        val binding = DataBindingUtil.inflate<EditListFragmentBinding>(inflater,
-        R.layout.edit_list_fragment, container, false)
+        val binding: EditListFragmentBinding = DataBindingUtil.inflate(
+            inflater, R.layout.edit_list_fragment, container, false
+        )
 
         val application = requireNotNull(this.activity).application
         val dataSource = Database.getInstance(application).databaseDao
@@ -45,26 +47,29 @@ class EditListFragment : Fragment() {
         viewModel.editListId.value = listId
         viewModel.setList(listId)
 
+        val adapter = EditListItemAdapter()
+        binding.editListListView.adapter = adapter
+
         binding.cancelListButton.setOnClickListener { view ->
             view.findNavController().navigate(EditListFragmentDirections.actionEditListFragmentToListFragment())
         }
-        binding.saveListButton.setOnClickListener { view ->
-            viewModel.list.value?.let {
-                it.updatedTimeMilli = System.currentTimeMillis()
-                it.listName = binding.editListTitle.text.toString()
-            }
-
-            viewModel.saveOrUpdate()
-            viewModel.listItems.value?.add(
-                ListItem(
-                    listId = viewModel.editListId.value!!,
-                    itemNumber = 1,
-                    itemDetails = binding.listItemDetail.text.toString()
-                )
-            )
-            viewModel.saveItems()
-            view.findNavController().navigate(EditListFragmentDirections.actionEditListFragmentToListFragment())
-        }
+//        binding.saveListButton.setOnClickListener { view ->
+//            viewModel.list.value?.let {
+//                it.updatedTimeMilli = System.currentTimeMillis()
+//                it.listName = binding.editListTitle.text.toString()
+//            }
+//
+//            viewModel.saveOrUpdate()
+//            viewModel.listItems.value?.add(
+//                ListItem(
+//                    listId = viewModel.editListId.value!!,
+//                    itemNumber = 1,
+//                    itemDetails = binding.listItemDetail.text.toString()
+//                )
+//            )
+//            viewModel.saveItems()
+//            view.findNavController().navigate(EditListFragmentDirections.actionEditListFragmentToListFragment())
+//        }
 
         binding.setLifecycleOwner(this)
         return binding.root

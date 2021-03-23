@@ -1,10 +1,7 @@
 package com.shicks.lifeRoot.list
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.shicks.lifeRoot.database.daos.DatabaseDao
 import com.shicks.lifeRoot.database.entities.ListItem
 import com.shicks.lifeRoot.database.entities.MyList
@@ -17,7 +14,10 @@ class EditListViewModel(
 
     var editListId = MutableLiveData<Long>()
     var list = MutableLiveData<MyList>()
-    var listItems = MutableLiveData<MutableList<ListItem>>(mutableListOf())
+
+    private var _listItems = MutableLiveData<List<ListItem>>()
+    val listItems: LiveData<List<ListItem>>
+        get() = _listItems
 
     fun saveOrUpdate() {
         if (list.value != null) {
@@ -35,9 +35,9 @@ class EditListViewModel(
 
     fun saveItems() {
         viewModelScope.launch {
-            listItems.value?.forEach {
-                dataBase.insertListItem(it)
-            }
+//            listItems.value?.forEach {
+//                dataBase.insertListItem(it)
+//            }
         }
     }
 

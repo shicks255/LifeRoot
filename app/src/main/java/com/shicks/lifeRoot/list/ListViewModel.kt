@@ -29,9 +29,9 @@ class ListViewModel(
         get() = _myLists
 
     init {
-
         viewModelScope.launch {
             _myLists.value = dataBase.getMyLists()
+            println(_myLists.value)
         }
     }
 }
