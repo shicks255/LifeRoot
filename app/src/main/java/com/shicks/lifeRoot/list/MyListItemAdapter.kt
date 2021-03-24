@@ -7,9 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.shicks.lifeRoot.R
 import com.shicks.lifeRoot.database.entities.MyList
-import kotlinx.android.synthetic.main.my_list_list_items.view.*
 
-class MyListItemAdapter
+class MyListItemAdapter(val clickListener: (myList: MyList) -> Unit )
     : RecyclerView.Adapter<MyListItemAdapter.ViewHolder>() {
 
     var data: List<MyList> = listOf()
@@ -19,7 +18,7 @@ class MyListItemAdapter
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent)
+        return ViewHolder.from(parent, clickListener)
     }
 
     override fun getItemCount(): Int {
@@ -28,19 +27,21 @@ class MyListItemAdapter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data.get(position)
-        holder.bind(item)
+        holder.bind(item, clickListener)
     }
 
-    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder private constructor(itemView: View)
+        : RecyclerView.ViewHolder(itemView) {
 
         val name: TextView = itemView.findViewById(R.id.myListItemDetail)
 
-        fun bind(item: MyList) {
+        fun bind(item: MyList, clickListener: (myList: MyList) -> Unit) {
             name.text = item.listName
+            itemView.setOnClickListener { clickListener(item) }
         }
 
         companion object {
-            fun from(parent: ViewGroup): ViewHolder {
+            fun from(parent: ViewGroup, clickListener: (myList: MyList) -> Unit): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val view = layoutInflater
                     .inflate(R.layout.my_list_list_items, parent, false)

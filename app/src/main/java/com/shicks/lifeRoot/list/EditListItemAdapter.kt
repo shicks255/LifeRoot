@@ -11,7 +11,7 @@ import com.shicks.lifeRoot.database.entities.ListItem
 class EditListItemAdapter
     : RecyclerView.Adapter<EditListItemAdapter.ViewHolder>() {
 
-    var data = listOf<ListItem>()
+    var data: List<ListItem> = listOf()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -39,7 +39,6 @@ class EditListItemAdapter
         val name: TextView = itemView.findViewById(R.id.listItemDetail)
 
         fun bind(item: ListItem) {
-            val res = itemView.context.resources
             name.text = item.itemDetails
         }
 

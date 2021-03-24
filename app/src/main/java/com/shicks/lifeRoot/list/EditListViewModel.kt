@@ -12,20 +12,23 @@ class EditListViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    var editListId = MutableLiveData<Long>()
     var list = MutableLiveData<MyList>()
 
     private var _listItems = MutableLiveData<List<ListItem>>()
     val listItems: LiveData<List<ListItem>>
         get() = _listItems
 
-    fun saveOrUpdate() {
+    fun saveOrUpdateList(name: String) {
         if (list.value != null) {
+            list.value?.updatedTimeMilli = System.currentTimeMillis()
+            list.value?.listName = name
+
+            //this is a new list
             if (list.value!!.listId == 0L) {
                 viewModelScope.launch {
                     dataBase.insertList(list.value!!)
                 }
-            } else if (list.value!!.listId > 0L) {
+            } else {
                 viewModelScope.launch {
                     dataBase.updateList(list.value!!)
                 }
@@ -33,15 +36,23 @@ class EditListViewModel(
         }
     }
 
-    fun saveItems() {
+    fun saveItems(itemDetails: String) {
+
+        val newItem = ListItem(
+            listId = list.value!!.listId,
+            itemNumber = 1,
+            itemDetails = itemDetails,
+            createdTimeMilli = System.currentTimeMillis(),
+            updatedTimeMilli = System.currentTimeMillis()
+        )
+
         viewModelScope.launch {
-//            listItems.value?.forEach {
-//                dataBase.insertListItem(it)
-//            }
+            dataBase.insertListItem(newItem)
+            _listItems.value = dataBase.getMyListItems(list.value!!.listId)
         }
     }
 
-    fun setList(listId: Long) {
+    fun setListAndItems(listId: Long) {
         if (listId == 0L) {
             val newList = MyList(
                 listName = ""
@@ -51,8 +62,10 @@ class EditListViewModel(
             viewModelScope.launch {
                 val editingList = dataBase.getMyList(listId)
                 list.value = editingList
+
+                _listItems.value = dataBase
+                    .getMyListItems(listId)
             }
         }
     }
-
 }
