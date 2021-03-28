@@ -18,26 +18,20 @@
 
         <EditText
             android:id="@+id/editListTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
             android:layout_marginTop="40dp"
+            android:background="@null"
             android:ems="10"
             android:hint="@string/enter_a_list_title"
             android:inputType="textPersonName"
-            android:text="@{editListViewModel.list.listName}"
+            android:text="This is My List"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/listItemDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="12dp"
-            android:hint="@string/enter_a_list_item"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--            android:text="@{editListViewModel.list.listName}"-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/editListListView"

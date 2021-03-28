@@ -2,6 +2,8 @@ package com.shicks.lifeRoot.list
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -53,7 +55,7 @@ class EditListFragment : Fragment() {
 
         viewModel.listItems.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.data = it
+                adapter.setupData(it)
             }
         })
 
@@ -65,8 +67,12 @@ class EditListFragment : Fragment() {
             view.findNavController().navigate(EditListFragmentDirections.actionEditListFragmentToListFragment())
         }
         binding.saveListButton.setOnClickListener { view ->
-            viewModel.saveOrUpdateList(binding.editListTitle.text.toString())
-            viewModel.saveItems(binding.listItemDetail.text.toString())
+            adapter.data.forEach {
+                println(it.toString())
+            }
+            val listName = binding.editListTitle.text.toString()
+            val items = adapter.data
+            viewModel.saveListAndItems(listName, items);
             Toast.makeText(this.context, "List Updated", Toast.LENGTH_SHORT)
                 .show()
         }

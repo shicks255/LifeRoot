@@ -18,38 +18,39 @@ class EditListViewModel(
     val listItems: LiveData<List<ListItem>>
         get() = _listItems
 
-    fun saveOrUpdateList(name: String) {
+    fun saveListAndItems(listName: String, items: List<ListItemWithChange>) {
         if (list.value != null) {
             list.value?.updatedTimeMilli = System.currentTimeMillis()
-            list.value?.listName = name
+            list.value?.listName = listName
 
             //this is a new list
-            if (list.value!!.listId == 0L) {
-                viewModelScope.launch {
-                    dataBase.insertList(list.value!!)
-                }
-            } else {
-                viewModelScope.launch {
+            viewModelScope.launch {
+                if (list.value!!.listId == 0L) {
+                    val newListId = dataBase.insertList(list.value!!)
+                    list.value!!.listId = newListId
+                    handleListUpdates(items)
+                } else {
                     dataBase.updateList(list.value!!)
+                    handleListUpdates(items)
                 }
             }
         }
     }
 
-    fun saveItems(itemDetails: String) {
-
-        val newItem = ListItem(
-            listId = list.value!!.listId,
-            itemNumber = 1,
-            itemDetails = itemDetails,
-            createdTimeMilli = System.currentTimeMillis(),
-            updatedTimeMilli = System.currentTimeMillis()
-        )
-
-        viewModelScope.launch {
-            dataBase.insertListItem(newItem)
-            _listItems.value = dataBase.getMyListItems(list.value!!.listId)
+    private suspend fun handleListUpdates(items: List<ListItemWithChange>) {
+        items.forEach {
+            if (it.item.itemDetails != it.value && it.value.isNotEmpty()) {
+                val newValue = it.item.copy(
+                    updatedTimeMilli = System.currentTimeMillis(),
+                    itemDetails = it.value
+                )
+                if (newValue.listItemId == 0L)
+                    dataBase.insertListItem(newValue)
+                else
+                    dataBase.updateListItem(newValue)
+            }
         }
+        _listItems.value = dataBase.getMyListItems(list.value!!.listId)
     }
 
     fun setListAndItems(listId: Long) {

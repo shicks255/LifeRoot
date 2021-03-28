@@ -12,7 +12,7 @@ import com.shicks.lifeRoot.database.entities.ListItem
 interface DatabaseDao {
 
     @Insert
-    suspend fun insertList(myList: MyList)
+    suspend fun insertList(myList: MyList): Long
 
     @Insert
     suspend fun insertListItem(listItem: ListItem)

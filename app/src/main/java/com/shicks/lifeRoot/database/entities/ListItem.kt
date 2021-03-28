@@ -22,6 +22,5 @@ data class ListItem(
     val itemNumber: Int,
 
     @ColumnInfo(name = "item_details")
-    val itemDetails: String
-
+    var itemDetails: String
 )
