@@ -8,7 +8,9 @@ import com.shicks.lifeRoot.database.daos.DatabaseDao
 import com.shicks.lifeRoot.database.entities.MyList
 import com.shicks.lifeRoot.database.entities.ListItem
 
-@Database(entities = [MyList::class, ListItem::class], version = 1, exportSchema = false)
+@Database(entities = [MyList::class, ListItem::class],
+    version = 2,
+    exportSchema = false)
 abstract class Database : RoomDatabase() {
     abstract val databaseDao: DatabaseDao
 

@@ -22,5 +22,12 @@ data class ListItem(
     val itemNumber: Int,
 
     @ColumnInfo(name = "item_details")
-    var itemDetails: String
-)
+    var itemDetails: String,
+
+    @ColumnInfo(name = "completed_time")
+    val completed: Long? = null
+) {
+
+    fun isComplete(): Boolean = completed != null && completed > 0
+
+}

@@ -21,6 +21,7 @@ import com.shicks.lifeRoot.database.Database
 import com.shicks.lifeRoot.database.entities.ListItem
 import com.shicks.lifeRoot.database.entities.MyList
 import com.shicks.lifeRoot.databinding.EditListFragmentBinding
+import com.shicks.lifeRoot.generated.callback.OnClickListener
 
 class EditListFragment : Fragment() {
 
@@ -47,7 +48,11 @@ class EditListFragment : Fragment() {
         )
         binding.editListViewModel = viewModel
 
-        val adapter = EditListItemAdapter()
+        val adapter = EditListItemAdapter(
+            deleteFunction = { id -> viewModel.deleteListItem(id) },
+            onCheckFunction = { item -> viewModel.checkItem(item) },
+            offCheckFunction = { item -> viewModel.unCheckitem(item) }
+        )
         binding.editListListView.adapter = adapter
 
         val listId = EditListFragmentArgs.fromBundle(this.requireArguments()).editListId
@@ -64,7 +69,8 @@ class EditListFragment : Fragment() {
         })
 
         binding.cancelListButton.setOnClickListener { view ->
-            view.findNavController().navigate(EditListFragmentDirections.actionEditListFragmentToListFragment())
+            view.findNavController()
+                .navigate(EditListFragmentDirections.actionEditListFragmentToListFragment())
         }
         binding.saveListButton.setOnClickListener { view ->
             adapter.data.forEach {

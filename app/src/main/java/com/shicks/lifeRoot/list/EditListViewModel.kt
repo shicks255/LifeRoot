@@ -37,12 +37,40 @@ class EditListViewModel(
         }
     }
 
+    fun deleteListItem(listItemId: Long) {
+        viewModelScope.launch {
+            dataBase.deleteListItem(listItemId)
+            _listItems.value = dataBase.getMyListItems(list.value!!.listId)
+        }
+    }
+
+    fun checkItem(listItem: ListItem) {
+        viewModelScope.launch {
+            val newItem = listItem.copy(
+                completed = System.currentTimeMillis()
+            )
+            dataBase.updateListItem(newItem)
+            _listItems.value = dataBase.getMyListItems(list.value!!.listId)
+        }
+    }
+
+    fun unCheckitem(listItem: ListItem) {
+        viewModelScope.launch {
+            val newItem = listItem.copy(
+                completed = null
+            )
+            dataBase.updateListItem(newItem)
+            _listItems.value =  dataBase.getMyListItems(list.value!!.listId)
+        }
+    }
+
     private suspend fun handleListUpdates(items: List<ListItemWithChange>) {
         items.forEach {
             if (it.item.itemDetails != it.value && it.value.isNotEmpty()) {
                 val newValue = it.item.copy(
                     updatedTimeMilli = System.currentTimeMillis(),
-                    itemDetails = it.value
+                    itemDetails = it.value,
+                    listId = list.value!!.listId
                 )
                 if (newValue.listItemId == 0L)
                     dataBase.insertListItem(newValue)

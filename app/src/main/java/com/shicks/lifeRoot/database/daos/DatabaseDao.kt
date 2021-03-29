@@ -1,10 +1,7 @@
 package com.shicks.lifeRoot.database.daos
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.shicks.lifeRoot.database.entities.MyList
 import com.shicks.lifeRoot.database.entities.ListItem
 
@@ -22,6 +19,9 @@ interface DatabaseDao {
 
     @Update
     suspend fun updateListItem(listItem: ListItem)
+
+    @Query("DELETE from list_item where listItemId = :listItemId")
+    suspend fun deleteListItem(listItemId: Long)
 
     @Query("SELECT * from my_list order by updated_time desc")
     suspend fun getMyLists(): List<MyList>
