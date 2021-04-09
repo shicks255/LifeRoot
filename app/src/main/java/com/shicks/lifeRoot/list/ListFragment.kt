@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.shicks.lifeRoot.R
 import com.shicks.lifeRoot.database.Database
+import com.shicks.lifeRoot.database.entities.MyList
 import com.shicks.lifeRoot.databinding.ListFragmentBinding
 
 class ListFragment : Fragment() {
@@ -33,13 +34,22 @@ class ListFragment : Fragment() {
             .get(ListViewModel::class.java)
 
         val binding = DataBindingUtil.inflate<ListFragmentBinding>(
-            inflater, R.layout.list_fragment, container, false)
+            inflater, R.layout.list_fragment, container, false
+        )
 
         binding.listViewModel = viewModel
 
-        val adapter = MyListItemAdapter(clickListener = {myList ->
-            viewModel.setNavigateListId(myList.listId)
-        })
+        val adapter = MyListItemAdapter(
+            clickListener = { myList ->
+                viewModel.setNavigateListId(myList.listId)
+            },
+            deleteClickListener = { myList: MyList ->
+                val confirm = DeleteListDialogFragment { ->
+                    viewModel.deleteList(myList.listId)
+                }
+                confirm.show(parentFragmentManager, "confirm")
+            }
+        )
         binding.myListListView.adapter = adapter
 
         viewModel.myLists.observe(viewLifecycleOwner, Observer {

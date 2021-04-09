@@ -24,6 +24,14 @@ class ListViewModel(
         navigateListId.value = null
     }
 
+    fun deleteList(listId: Long) {
+        viewModelScope.launch {
+            dataBase.deleteListItems(listId)
+            dataBase.deleteList(listId)
+            _myLists.value = dataBase.getMyLists()
+        }
+    }
+
     private var _myLists = MutableLiveData<List<MyList>>()
     val myLists: LiveData<List<MyList>>
         get() = _myLists

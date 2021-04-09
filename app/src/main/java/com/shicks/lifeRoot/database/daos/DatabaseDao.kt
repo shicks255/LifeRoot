@@ -23,10 +23,16 @@ interface DatabaseDao {
     @Query("DELETE from list_item where listItemId = :listItemId")
     suspend fun deleteListItem(listItemId: Long)
 
+    @Query("DELETE from list_item where list_id = :listId")
+    suspend fun deleteListItems(listId: Long)
+
+    @Query("DELETE from my_list where listId = :listId")
+    suspend fun deleteList(listId: Long)
+
     @Query("SELECT * from my_list order by updated_time desc")
     suspend fun getMyLists(): List<MyList>
 
-    @Query("SELECT * from list_item where list_id = :listId order by item_number")
+    @Query("SELECT * from list_item where list_id = :listId order by completed_time asc")
     suspend fun getMyListItems(listId: Long): List<ListItem>
 
     @Query("SELECT * from my_list where listId = :listId")

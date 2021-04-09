@@ -37,6 +37,19 @@ class EditListViewModel(
         }
     }
 
+    fun saveListItem(item: ListItemWithChange) {
+        viewModelScope.launch {
+            if (list.value!!.listId == 0L) {
+                val newListId = dataBase.insertList(list.value!!)
+                list.value!!.listId = newListId
+                handleListUpdates(listOf(item))
+            } else {
+                dataBase.updateList(list.value!!)
+                handleListUpdates(listOf(item))
+            }
+        }
+    }
+
     fun deleteListItem(listItemId: Long) {
         viewModelScope.launch {
             dataBase.deleteListItem(listItemId)
@@ -45,6 +58,7 @@ class EditListViewModel(
     }
 
     fun checkItem(listItem: ListItem) {
+        println("tes")
         viewModelScope.launch {
             val newItem = listItem.copy(
                 completed = System.currentTimeMillis()
@@ -55,6 +69,7 @@ class EditListViewModel(
     }
 
     fun unCheckitem(listItem: ListItem) {
+        println("test")
         viewModelScope.launch {
             val newItem = listItem.copy(
                 completed = null
@@ -92,8 +107,11 @@ class EditListViewModel(
                 val editingList = dataBase.getMyList(listId)
                 list.value = editingList
 
-                _listItems.value = dataBase
+                val listItems = dataBase
                     .getMyListItems(listId)
+                    .sortedBy { it.isComplete() }
+
+                _listItems.value = listItems
             }
         }
     }

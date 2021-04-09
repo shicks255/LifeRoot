@@ -51,7 +51,8 @@ class EditListFragment : Fragment() {
         val adapter = EditListItemAdapter(
             deleteFunction = { id -> viewModel.deleteListItem(id) },
             onCheckFunction = { item -> viewModel.checkItem(item) },
-            offCheckFunction = { item -> viewModel.unCheckitem(item) }
+            offCheckFunction = { item -> viewModel.unCheckitem(item) },
+            onTextChangeFunction = { item -> viewModel.saveListItem(item)}
         )
         binding.editListListView.adapter = adapter
 
@@ -68,20 +69,20 @@ class EditListFragment : Fragment() {
             binding.editListTitle.setText(it.listName)
         })
 
-        binding.cancelListButton.setOnClickListener { view ->
-            view.findNavController()
-                .navigate(EditListFragmentDirections.actionEditListFragmentToListFragment())
-        }
-        binding.saveListButton.setOnClickListener { view ->
-            adapter.data.forEach {
-                println(it.toString())
-            }
-            val listName = binding.editListTitle.text.toString()
-            val items = adapter.data
-            viewModel.saveListAndItems(listName, items);
-            Toast.makeText(this.context, "List Updated", Toast.LENGTH_SHORT)
-                .show()
-        }
+//        binding.cancelListButton.setOnClickListener { view ->
+//            view.findNavController()
+//                .navigate(EditListFragmentDirections.actionEditListFragmentToListFragment())
+//        }
+//        binding.saveListButton.setOnClickListener { view ->
+//            adapter.data.forEach {
+//                println(it.toString())
+//            }
+//            val listName = binding.editListTitle.text.toString()
+//            val items = adapter.data
+//            viewModel.saveListAndItems(listName, items);
+//            Toast.makeText(this.context, "List Updated", Toast.LENGTH_SHORT)
+//                .show()
+//        }
 
         binding.lifecycleOwner = this
         return binding.root

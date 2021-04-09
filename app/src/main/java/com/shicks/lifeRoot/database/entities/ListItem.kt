@@ -28,6 +28,8 @@ data class ListItem(
     val completed: Long? = null
 ) {
 
-    fun isComplete(): Boolean = completed != null && completed > 0
+    fun isComplete(): Boolean {
+        return completed != null && completed > 0
+    }
 
 }

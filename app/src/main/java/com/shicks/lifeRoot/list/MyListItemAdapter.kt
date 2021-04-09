@@ -3,13 +3,16 @@ package com.shicks.lifeRoot.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.shicks.lifeRoot.R
 import com.shicks.lifeRoot.database.entities.MyList
 
-class MyListItemAdapter(val clickListener: (myList: MyList) -> Unit )
-    : RecyclerView.Adapter<MyListItemAdapter.ViewHolder>() {
+class MyListItemAdapter(
+    val clickListener: (myList: MyList) -> Unit,
+    val deleteClickListener: (myList: MyList) -> Unit
+) : RecyclerView.Adapter<MyListItemAdapter.ViewHolder>() {
 
     var data: List<MyList> = listOf()
         set(value) {
@@ -27,17 +30,22 @@ class MyListItemAdapter(val clickListener: (myList: MyList) -> Unit )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data.get(position)
-        holder.bind(item, clickListener)
+        holder.bind(item, clickListener, deleteClickListener)
     }
 
-    class ViewHolder private constructor(itemView: View)
-        : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val name: TextView = itemView.findViewById(R.id.myListItemDetail)
+        val delete: ImageView = itemView.findViewById(R.id.deleteMyListButton)
 
-        fun bind(item: MyList, clickListener: (myList: MyList) -> Unit) {
+        fun bind(
+            item: MyList,
+            clickListener: (myList: MyList) -> Unit,
+            deleteClickListener: (myList: MyList) -> Unit
+        ) {
             name.text = item.listName
             itemView.setOnClickListener { clickListener(item) }
+            delete.setOnClickListener { deleteClickListener(item) }
         }
 
         companion object {
